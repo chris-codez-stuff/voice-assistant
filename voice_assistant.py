@@ -31,10 +31,13 @@ def on_closing():
 
 root = tk.Tk()
 root.title("Voice Assistant")
-root.geometry("300x200")
+root.geometry("300x300")
 
 label = tk.Label(root, text="Voice Assistant", font=("Helvetica", 16))
 label.pack(pady=10)
+
+commands_label = tk.Label(root, text="Available Commands:\n- Calculator\n- TextEdit\n- Zoom\n- Terminal", font=("Helvetica", 12))
+commands_label.pack(pady=10)
 
 record_button = tk.Button(root, text="Start Recording", command=start_recording, font=("Helvetica", 14))
 record_button.pack(pady=20)
