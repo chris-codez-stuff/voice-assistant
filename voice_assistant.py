@@ -10,15 +10,15 @@ def start_recording():
     filename = "output.wav"
 
     sr.record_audio(filename, duration, fs)
-    speech = sr.recognize_speech_from_audio(filename).capitalize()
+    speech = sr.recognize_speech_from_audio(filename).lower()
 
-    if speech == "Calculator":
+    if speech == "open calculator":
         os.system("open -a Calculator")
-    elif speech == "Text edit":
+    elif speech == "open text edit":
         os.system("open -a TextEdit")
-    elif speech == "Zoom":
+    elif speech == "open zoom":
         os.system("open -a zoom.us")
-    elif speech == "Terminal":
+    elif speech == "open terminal":
         os.system("open -a Terminal")
     else:
         messagebox.showerror("Error", "Sorry, I could not recognize the command.")
@@ -36,7 +36,9 @@ root.geometry("300x300")
 label = tk.Label(root, text="Voice Assistant", font=("Helvetica", 16))
 label.pack(pady=10)
 
-commands_label = tk.Label(root, text="Available Commands:\n- Calculator\n- TextEdit\n- Zoom\n- Terminal", font=("Helvetica", 12))
+commands_label = tk.Label(root,
+                          text="Available Commands:\n- Open calculator\n- Open TextEdit\n- Open Zoom\n- Open Terminal",
+                          font=("Helvetica", 12))
 commands_label.pack(pady=10)
 
 record_button = tk.Button(root, text="Start Recording", command=start_recording, font=("Helvetica", 14))
