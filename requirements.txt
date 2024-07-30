@@ -1,3 +1,6 @@
 sounddevice==0.4.7
 wavio==0.0.9
 SpeechRecognition==3.10.4
+gtts==2.5.1
+pydub==0.25.1
+pygame==2.6.0
