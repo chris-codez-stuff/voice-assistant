@@ -1,7 +1,9 @@
+import time
 import tkinter as tk
 from tkinter import messagebox
 import os
 import speech_recognizer as sr
+import talk_back
 
 commands = {
     "open calculator": "open -a Calculator",
@@ -15,21 +17,55 @@ def start_recording():
     fs = 44100
     duration = int(duration_entry.get())
     filename = "output.wav"
+    mp3_filename = "output.mp3"
 
-    sr.record_audio(filename, duration, fs)
-    speech = sr.recognize_speech_from_audio(filename).lower()
+    try:
+        sr.record_audio(filename, duration, fs)
+        speech = sr.recognize_speech_from_audio(filename).lower()
+        if os.path.exists(filename):
+            os.remove(filename)
 
-    if speech:
-        recognized_command_label.config(text=f"Recognized Command: {speech}")
-        if speech in commands:
-            os.system(commands[speech])
-            log_action(f"Executed: {speech}")
+        if speech:
+            recognized_command_label.config(text=f"Recognized Command: {speech}")
+            if speech in commands:
+                talk_back.text_to_audio(f"OK done!")
+                time.sleep(1)
+                talk_back.play()
+
+                if os.path.exists(mp3_filename):
+                    os.remove(mp3_filename)
+
+                os.system(commands[speech])
+                log_action(f"Executed: {speech}")
+
+            else:
+                talk_back.text_to_audio("Sorry I am not able to do that!")
+                time.sleep(1)
+                talk_back.play()
+
+                if os.path.exists(mp3_filename):
+                    os.remove(mp3_filename)
+
+                messagebox.showerror("Error", "Sorry, I could not recognize the command.")
+                log_action(f"Failed to recognize: {speech}")
+
         else:
-            messagebox.showerror("Error", "Sorry, I could not recognize the command.")
-            log_action(f"Failed to recognize: {speech}")
-    else:
-        recognized_command_label.config(text="Could not recognize any command")
-        log_action("Failed to recognize any command")
+            talk_back.text_to_audio("You didn't say anything!")
+            time.sleep(1)
+            talk_back.play()
+
+            if os.path.exists(mp3_filename):
+                os.remove(mp3_filename)
+
+            recognized_command_label.config(text="Could not recognize any command")
+            log_action("Failed to recognize any command")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        if os.path.exists(filename):
+            os.remove(filename)
+        if os.path.exists(mp3_filename):
+            os.remove(mp3_filename)
 
 
 def update_commands_label():
